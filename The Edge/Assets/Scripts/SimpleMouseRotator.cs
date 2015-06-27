@@ -37,6 +37,29 @@ namespace UnityStandardAssets.Utility
 
         private void Update()
         {
+			// Make sure the user pressed the mouse down
+			if (!Input.GetMouseButton(1))
+			{
+				return;
+			}
+
+			var mainCamera = FindCamera();
+			
+			// We need to actually hit an object
+			RaycastHit hit = new RaycastHit();
+			if (
+				!Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
+			                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 100,
+			                 Physics.DefaultRaycastLayers))
+
+			// We need to hit a rigidbody that is not kinematic
+			/*if (!hit.rigidbody || hit.rigidbody.isKinematic)
+			{
+				return;
+			}*/
+			
+				Debug.Log(hit);
+
             // we make initial calculations from the original local rotation
             transform.localRotation = m_OriginalRotation;
 
@@ -109,5 +132,15 @@ namespace UnityStandardAssets.Utility
             // update the actual gameobject's rotation
             transform.localRotation = m_OriginalRotation*Quaternion.Euler(-m_FollowAngles.x, m_FollowAngles.y, 0);
         }
+
+		private Camera FindCamera()
+		{
+			if (GetComponent<Camera>())
+			{
+				return GetComponent<Camera>();
+			}
+			
+			return Camera.main;
+		}
     }
 }

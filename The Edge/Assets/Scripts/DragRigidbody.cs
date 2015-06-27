@@ -13,7 +13,7 @@ namespace UnityStandardAssets.Utility
         const float k_Distance = 0.2f;
         const bool k_AttachToCenterOfMass = false;
 
-        private SpringJoint m_SpringJoint;
+		private SpringJoint m_SpringJoint;
 
 
         private void Update()
@@ -58,6 +58,7 @@ namespace UnityStandardAssets.Utility
             m_SpringJoint.connectedBody = hit.rigidbody;
 
             StartCoroutine("DragObject", hit.distance);
+			hit.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
 
@@ -76,6 +77,7 @@ namespace UnityStandardAssets.Utility
             }
             if (m_SpringJoint.connectedBody)
             {
+				m_SpringJoint.connectedBody.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                 m_SpringJoint.connectedBody.drag = oldDrag;
                 m_SpringJoint.connectedBody.angularDrag = oldAngularDrag;
                 m_SpringJoint.connectedBody = null;
